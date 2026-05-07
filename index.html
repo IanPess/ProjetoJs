@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Gerenciamento de Tarefas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="estilo.css" />
+</head>
+<body>
+
+  <div class="bg-mesh"></div>
+
+  <div class="page-wrapper">
+
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="10" height="10" rx="2" fill="currentColor" opacity="0.9"/>
+          <rect x="15" y="3" width="10" height="10" rx="2" fill="currentColor" opacity="0.5"/>
+          <rect x="3" y="15" width="10" height="10" rx="2" fill="currentColor" opacity="0.5"/>
+          <rect x="15" y="15" width="10" height="10" rx="2" fill="currentColor" opacity="0.2"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1 class="page-title">Sistema de Gerenciamento<br/><em>de Tarefas</em></h1>
+        <p class="page-subtitle">Organize, priorize e acompanhe suas atividades</p>
+      </div>
+    </header>
+
+    <!-- Main Card -->
+    <main class="main-card">
+
+      <!-- Mensagem de feedback -->
+      <div id="mensagem" class="mensagem" role="alert" aria-live="polite">
+        <!-- JS inserirá mensagens aqui -->
+      </div>
+
+      <!-- Formulário de Cadastro -->
+      <section class="form-section">
+        <div class="section-label">
+          <span class="label-dot"></span>
+          Nova Tarefa
+        </div>
+
+        <div class="form-grid">
+
+          <!-- Título -->
+          <div class="field field--full">
+            <label for="titulo" class="field-label">Título</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              class="field-input"
+              placeholder="Ex: Revisar relatório mensal…"
+              autocomplete="off"
+            />
+          </div>
+
+          <!-- Descrição -->
+          <div class="field field--full">
+            <label for="descricao" class="field-label">Descrição</label>
+            <textarea
+              id="descricao"
+              name="descricao"
+              class="field-input field-textarea"
+              placeholder="Detalhes sobre a tarefa…"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <!-- Prioridade -->
+          <div class="field">
+            <label for="prioridade" class="field-label">Prioridade</label>
+            <div class="select-wrapper">
+              <select id="prioridade" name="prioridade" class="field-input field-select">
+                <option value="" disabled selected>Selecione…</option>
+                <option value="baixa">🟢 Baixa</option>
+                <option value="media">🟡 Média</option>
+                <option value="alta">🔴 Alta</option>
+              </select>
+              <span class="select-arrow">↓</span>
+            </div>
+          </div>
+
+          <!-- Data Limite -->
+          <div class="field">
+            <label for="dataLimite" class="field-label">Data Limite</label>
+            <input
+              type="date"
+              id="dataLimite"
+              name="dataLimite"
+              class="field-input"
+            />
+          </div>
+
+          <!-- Status -->
+          <div class="field">
+            <label for="status" class="field-label">Status</label>
+            <div class="select-wrapper">
+              <select id="status" name="status" class="field-input field-select">
+                <option value="" disabled selected>Selecione…</option>
+                <option value="pendente">⏳ Pendente</option>
+                <option value="concluida">✅ Concluída</option>
+              </select>
+              <span class="select-arrow">↓</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Área dinâmica de observação (JS adicionará campo aqui) -->
+        <div id="areaObservacao" class="area-observacao"></div>
+
+        <!-- Botões de ação -->
+        <div class="form-actions">
+          <button type="button" id="btnObservacao" class="btn btn--ghost">
+            <span class="btn-icon">+</span>
+            Observação
+          </button>
+          <button onclick="Adicionar()" type="button" id="btnConcluir" class="btn btn--primary">
+            <span class="btn-icon">✓</span>
+            Concluir
+          </button>
+        </div>
+
+      </section>
+
+      <!-- Divisor -->
+      <div class="divider">
+        <span class="divider-text">Tarefas cadastradas</span>
+      </div>
+
+      <!-- Filtros -->
+      <section class="filter-section">
+        <div class="section-label">
+          <span class="label-dot label-dot--secondary"></span>
+          Filtrar
+        </div>
+
+        <div class="filter-row">
+
+          <div class="field filter-field">
+            <label for="filtroStatus" class="field-label">Status</label>
+            <div class="select-wrapper">
+              <select id="filtroStatus" name="filtroStatus" class="field-input field-select">
+                <option value="">Todos</option>
+                <option value="pendente">⏳ Pendente</option>
+                <option value="concluida">✅ Concluída</option>
+              </select>
+              <span class="select-arrow">↓</span>
+            </div>
+          </div>
+
+          <div class="field filter-field">
+            <label for="filtroPrioridade" class="field-label">Prioridade</label>
+            <div class="select-wrapper">
+              <select id="filtroPrioridade" name="filtroPrioridade" class="field-input field-select">
+                <option value="">Todas</option>
+                <option value="baixa">🟢 Baixa</option>
+                <option value="media">🟡 Média</option>
+                <option value="alta">🔴 Alta</option>
+              </select>
+              <span class="select-arrow">↓</span>
+            </div>
+          </div>
+
+          <div class="field filter-btn-field">
+            <label class="field-label field-label--invisible">Ação</label>
+            <button type="button" id="btnFiltrar" class="btn btn--filter">
+              <span class="btn-icon">⊞</span>
+              Filtrar
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Área da tabela (JS inserirá a tabela aqui) -->
+      <div id="areaTabela" class="area-tabela">
+        <div class="table-empty-state">
+          <div class="empty-icon">📋</div>
+          <p class="empty-text">Nenhuma tarefa cadastrada ainda.<br/>Preencha o formulário acima para começar.</p>
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>Sistema de Gerenciamento de Tarefas &mdash; Pronto para receber JavaScript</p>
+    </footer>
+
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
