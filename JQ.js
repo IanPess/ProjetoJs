@@ -1,7 +1,14 @@
-function RenderizarTabela() {
+function RenderizarTabela(lista) {
 
     const areaTabela = document.querySelector("#areaTabela");
-
+    if (lista.length === 0) {
+        areaTabela.innerHTML = `
+            <div class="table-empty-state">
+                <p>Nenhuma tarefa cadastrada.</p>
+            </div>
+        `;
+        return;
+    }
     areaTabela.innerHTML = `
         <table border="1">
             <thead>
@@ -20,8 +27,7 @@ function RenderizarTabela() {
     `;
 
     const tbody = document.querySelector("#tbodyTarefas");
-
-    tarefas.forEach((item, indice) => {
+    lista.forEach((item, indice) => {
 
         let tr = document.createElement("tr");
 
@@ -53,19 +59,38 @@ $("#btnConcluir").on("click", function () {
 
     Adicionar();
 
-    RenderizarTabela();
+    RenderizarTabela(tarefas);
 
 });
 
-
+$("form").on("submit", function (e) {
+    e.preventDefault();
+});
 $(document).on("click", ".btnExcluir", function () {
 
     let indice = $(this).data("indice");
 
     Remover(indice);
 
-    RenderizarTabela();
+    RenderizarTabela(tarefas);
 
+});
+$(document).on("dblclick", ".btnEditar", function () {
+
+    let indice = $(this).data("indice");
+    let tarefa = tarefas[indice];
+    document.getElementById("titulo").value = tarefa.titulo;
+    document.getElementById("descricao").value = tarefa.descricao;
+    document.getElementById("prioridade").value = tarefa.prioridade;
+    document.getElementById("dataLimite").value = tarefa.dataLimite;
+    document.getElementById("status").value = tarefa.status;
+    if(tarefa.observacao){
+        RenderizarBotao()
+        let Obs = document.getElementById("Obs");
+        Obs.value = tarefa.observacao;
+    }
+    editando = indice;
+  
 });
 
 function RenderizarBotao(){
@@ -80,5 +105,18 @@ function RenderizarBotao(){
 $("#btnObservacao").on("click", function () {
 
     RenderizarBotao();
+
+});
+$("#btnFiltrar").on("click", function () {
+
+    var filtroPrioridade = document.getElementById("filtroPrioridade").value;
+    var filtroStatus = document.getElementById("filtroStatus").value;
+
+    let tarefasFiltradas = tarefas.filter((item) => 
+        (filtroStatus == "" || item.status == filtroStatus) &&
+        (filtroPrioridade == "" || item.prioridade == filtroPrioridade)
+    );
+
+    RenderizarTabela(tarefasFiltradas);
 
 });
