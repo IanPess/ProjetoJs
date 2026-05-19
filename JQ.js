@@ -75,31 +75,55 @@ $(document).on("click", ".btnExcluir", function () {
     RenderizarTabela(tarefas);
 
 });
-$(document).on("dblclick", ".btnEditar", function () {
+function EditarTarefa(indice){
 
-    let indice = $(this).data("indice");
     let tarefa = tarefas[indice];
+
     document.getElementById("titulo").value = tarefa.titulo;
     document.getElementById("descricao").value = tarefa.descricao;
     document.getElementById("prioridade").value = tarefa.prioridade;
     document.getElementById("dataLimite").value = tarefa.dataLimite;
     document.getElementById("status").value = tarefa.status;
+
     if(tarefa.observacao){
-        RenderizarBotao()
+
+        RenderizarBotao();
+
         let Obs = document.getElementById("Obs");
+
         Obs.value = tarefa.observacao;
     }
+
     editando = indice;
-  
+}
+
+$(document).on("click", ".btnEditar", function () {
+
+    let indice = $(this).data("indice");
+
+    EditarTarefa(indice);
+
+});
+
+$(document).on("dblclick", ".btnEditar", function () {
+
+    let indice = $(this).data("indice");
+
+    EditarTarefa(indice);
+
 });
 
 function RenderizarBotao(){
 
-    const areaOBS = document.querySelector("#areaObservacao");
+    if($("#Obs").length == 0){
 
-    areaOBS.innerHTML = `
+        const areaOBS = document.querySelector("#areaObservacao");
+
+        areaOBS.innerHTML = `
             <textarea id="Obs"></textarea>
-    `;
+        `;
+    }
+
 }
 
 $("#btnObservacao").on("click", function () {
